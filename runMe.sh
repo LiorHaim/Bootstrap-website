@@ -1,2 +1,3 @@
-sudo docker build -t user-service-api:latest ./app
-sudo docker run -d --name user-api --port 3000:3000 user-service-api:latest
+sudo docker build -t website:latest ./app
+sudo docker run -d --name website -p 8080:80 website:latest   
+
