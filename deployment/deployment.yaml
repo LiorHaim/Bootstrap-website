@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microshift-bootstrap-demo-deployment
+spec:
+  selector:
+    matchLabels:
+      run: microshift-bootstrap-demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: microshift-bootstrap-demo
+    spec:
+      containers:
+        - name: microshift-bootstrap-demo
+          image: shonpaz123/microshift-bootstrap-demo
+          ports:
+            - containerPort: 80
+              protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: microshift-bootstrap-demo-service
+  labels:
+    run: microshift-bootstrap-demo
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 80
+      protocol: TCP
+  selector:
+    run: microshift-bootstrap-demo
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  labels:
+    run: microshift-bootstrap-demo
+  name: microshift-bootstrap-demo-route
+spec:
+  port:
+    targetPort: 80
+  to:
+    kind: Service
+    name: microshift-bootstrap-demo-service
+    weight: 100
